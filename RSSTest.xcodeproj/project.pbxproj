@@ -18,6 +18,9 @@
 		DD6E31E917275521000E7042 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD6E31E817275521000E7042 /* Default-568h@2x.png */; };
 		DD6E31EC17275521000E7042 /* CMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31EB17275521000E7042 /* CMViewController.m */; };
 		DD6E31EF17275521000E7042 /* CMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD6E31ED17275521000E7042 /* CMViewController.xib */; };
+		DD6E31FA17275BDC000E7042 /* CMDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31F917275BDC000E7042 /* CMDataDownloader.m */; };
+		DD6E31FD17275D3E000E7042 /* CMRssRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31FC17275D3E000E7042 /* CMRssRecord.m */; };
+		DD6E320017277439000E7042 /* CMDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31FF17277439000E7042 /* CMDataParser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,12 @@
 		DD6E31EA17275521000E7042 /* CMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMViewController.h; sourceTree = "<group>"; };
 		DD6E31EB17275521000E7042 /* CMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CMViewController.m; sourceTree = "<group>"; };
 		DD6E31EE17275521000E7042 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CMViewController.xib; sourceTree = "<group>"; };
+		DD6E31F817275BDC000E7042 /* CMDataDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMDataDownloader.h; sourceTree = "<group>"; };
+		DD6E31F917275BDC000E7042 /* CMDataDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMDataDownloader.m; sourceTree = "<group>"; };
+		DD6E31FB17275D3E000E7042 /* CMRssRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMRssRecord.h; sourceTree = "<group>"; };
+		DD6E31FC17275D3E000E7042 /* CMRssRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMRssRecord.m; sourceTree = "<group>"; };
+		DD6E31FE17277439000E7042 /* CMDataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMDataParser.h; sourceTree = "<group>"; };
+		DD6E31FF17277439000E7042 /* CMDataParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMDataParser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +96,12 @@
 				DD6E31E217275521000E7042 /* CMAppDelegate.m */,
 				DD6E31EA17275521000E7042 /* CMViewController.h */,
 				DD6E31EB17275521000E7042 /* CMViewController.m */,
+				DD6E31F817275BDC000E7042 /* CMDataDownloader.h */,
+				DD6E31F917275BDC000E7042 /* CMDataDownloader.m */,
+				DD6E31FE17277439000E7042 /* CMDataParser.h */,
+				DD6E31FF17277439000E7042 /* CMDataParser.m */,
+				DD6E31FB17275D3E000E7042 /* CMRssRecord.h */,
+				DD6E31FC17275D3E000E7042 /* CMRssRecord.m */,
 				DD6E31ED17275521000E7042 /* CMViewController.xib */,
 				DD6E31D917275521000E7042 /* Supporting Files */,
 			);
@@ -177,6 +192,9 @@
 				DD6E31DF17275521000E7042 /* main.m in Sources */,
 				DD6E31E317275521000E7042 /* CMAppDelegate.m in Sources */,
 				DD6E31EC17275521000E7042 /* CMViewController.m in Sources */,
+				DD6E31FA17275BDC000E7042 /* CMDataDownloader.m in Sources */,
+				DD6E31FD17275D3E000E7042 /* CMRssRecord.m in Sources */,
+				DD6E320017277439000E7042 /* CMDataParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +280,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSSTest/RSSTest-Prefix.pch";
 				INFOPLIST_FILE = "RSSTest/RSSTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -273,6 +292,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSSTest/RSSTest-Prefix.pch";
 				INFOPLIST_FILE = "RSSTest/RSSTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -297,6 +317,7 @@
 				DD6E31F417275521000E7042 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

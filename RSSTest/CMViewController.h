@@ -1,13 +1,16 @@
-//
-//  CMViewController.h
-//  RSSTest
-//
-//  Created by Vadim on 4/24/13.
-//  Copyright (c) 2013 Vadim. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
+#import "CMDataDownloader.h"
+#import "CMDataParser.h"
 
-@interface CMViewController : UIViewController
+@interface CMViewController : UIViewController <UITableViewDataSource, DataDownloaderDelegate, DataParserDelegate>
+{
+    CMDataDownloader    *_dataDownloader;
+    CMDataParser        *_dataParser;
+    NSMutableArray      *_rssRecords;
+    NSString            *_cacheFilePath;
+    NSDateFormatter     *_dateFormatter;
+}
+
+@property (retain, nonatomic) IBOutlet UITableView* tableView;
 
 @end
