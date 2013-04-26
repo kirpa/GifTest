@@ -45,9 +45,9 @@ static NSString *cRSSUrl = @"http://habrahabr.ru/rss/hubs/";
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    _done = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.delegate dataDownloaded:self.data];
-    _done = YES;
 }
 
 #pragma mark Object lifecycle

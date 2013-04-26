@@ -20,7 +20,6 @@
     [_dateFormatter setLocale:locale];
     [_dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss zzz"];
     [locale release];
-    
     _parser = [[NSXMLParser alloc] initWithData:data];
     _parser.delegate = self;
     [_parser parse];

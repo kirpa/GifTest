@@ -15,6 +15,8 @@
 @synthesize dataDownloader = _dataDownloader, rssRecords = _rssRecords, dataParser = _dataParser;
 
 static NSString* cCacheFilename = @"rsscache.plist";
+static NSString *cRefreshCellId = @"refreshCell";
+static NSString *cRecordCellId = @"recordCell";
 
 #pragma mark -
 
@@ -63,21 +65,20 @@ static NSString* cCacheFilename = @"rsscache.plist";
     {
         self.rssRecords = [NSMutableArray array];
     }
-    NSLog(@"Downloading records");
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) , ^(void)
-    {
-        [self downloadData];
-    });
+    [self downloadData];
 }
 
 - (void) downloadData
 {
-    // should not be called from the main thread
     if (!_dataDownloader)
     {
-        _dataDownloader = [[CMDataDownloader alloc] init];
-        _dataDownloader.delegate = self;
-        [_dataDownloader downloadData];
+        NSLog(@"Downloading records");
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) , ^(void)
+                       {
+                           _dataDownloader = [[CMDataDownloader alloc] init];
+                           _dataDownloader.delegate = self;
+                           [_dataDownloader downloadData];
+                       });
     }
     else
     {
@@ -148,8 +149,7 @@ static NSString* cCacheFilename = @"rsscache.plist";
 #pragma mark UITableViewDataSource delegate methods
 
 - (UITableViewCell *) getRefreshCell
-{
-    static NSString *cRefreshCellId = @"refreshCell";
+{    
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cRefreshCellId];
     if (!cell)
     {
@@ -163,8 +163,7 @@ static NSString* cCacheFilename = @"rsscache.plist";
 }
 
 - (UITableViewCell *) getRSSCellForRecord:(CMRssRecord *) record
-{
-    static NSString *cRecordCellId = @"recordCell";
+{    
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cRecordCellId];
     if (!cell)
     {
@@ -193,6 +192,15 @@ static NSString* cCacheFilename = @"rsscache.plist";
     return self.showRefresh ? [_rssRecords count] + 1 : [_rssRecords count];
 }
 
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSString *cellId = [[table cellForRowAtIndexPath:indexPath] reuseIdentifier];
+    if ([cellId isEqualToString:cRefreshCellId])
+        [self downloadData];
+        
+}
 
 #pragma mark Object lifecycle
 

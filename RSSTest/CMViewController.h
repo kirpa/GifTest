@@ -2,7 +2,7 @@
 #import "CMDataDownloader.h"
 #import "CMDataParser.h"
 
-@interface CMViewController : UIViewController <UITableViewDataSource, DataDownloaderDelegate, DataParserDelegate>
+@interface CMViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataDownloaderDelegate, DataParserDelegate>
 {
     CMDataDownloader    *_dataDownloader;
     CMDataParser        *_dataParser;
