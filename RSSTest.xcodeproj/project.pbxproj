@@ -21,6 +21,8 @@
 		DD6E31FA17275BDC000E7042 /* CMDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31F917275BDC000E7042 /* CMDataDownloader.m */; };
 		DD6E31FD17275D3E000E7042 /* CMRssRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31FC17275D3E000E7042 /* CMRssRecord.m */; };
 		DD6E320017277439000E7042 /* CMDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31FF17277439000E7042 /* CMDataParser.m */; };
+		DDA83BEB172AD623001C3B70 /* CMWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA83BE9172AD623001C3B70 /* CMWebViewController.m */; };
+		DDA83BEC172AD623001C3B70 /* CMWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDA83BEA172AD623001C3B70 /* CMWebViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,9 @@
 		DD6E31FC17275D3E000E7042 /* CMRssRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMRssRecord.m; sourceTree = "<group>"; };
 		DD6E31FE17277439000E7042 /* CMDataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMDataParser.h; sourceTree = "<group>"; };
 		DD6E31FF17277439000E7042 /* CMDataParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMDataParser.m; sourceTree = "<group>"; };
+		DDA83BE8172AD623001C3B70 /* CMWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMWebViewController.h; sourceTree = "<group>"; };
+		DDA83BE9172AD623001C3B70 /* CMWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMWebViewController.m; sourceTree = "<group>"; };
+		DDA83BEA172AD623001C3B70 /* CMWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMWebViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +101,8 @@
 				DD6E31E217275521000E7042 /* CMAppDelegate.m */,
 				DD6E31EA17275521000E7042 /* CMViewController.h */,
 				DD6E31EB17275521000E7042 /* CMViewController.m */,
+				DDA83BE8172AD623001C3B70 /* CMWebViewController.h */,
+				DDA83BE9172AD623001C3B70 /* CMWebViewController.m */,
 				DD6E31F817275BDC000E7042 /* CMDataDownloader.h */,
 				DD6E31F917275BDC000E7042 /* CMDataDownloader.m */,
 				DD6E31FE17277439000E7042 /* CMDataParser.h */,
@@ -103,6 +110,7 @@
 				DD6E31FB17275D3E000E7042 /* CMRssRecord.h */,
 				DD6E31FC17275D3E000E7042 /* CMRssRecord.m */,
 				DD6E31ED17275521000E7042 /* CMViewController.xib */,
+				DDA83BEA172AD623001C3B70 /* CMWebViewController.xib */,
 				DD6E31D917275521000E7042 /* Supporting Files */,
 			);
 			path = RSSTest;
@@ -179,6 +187,7 @@
 				DD6E31E717275521000E7042 /* Default@2x.png in Resources */,
 				DD6E31E917275521000E7042 /* Default-568h@2x.png in Resources */,
 				DD6E31EF17275521000E7042 /* CMViewController.xib in Resources */,
+				DDA83BEC172AD623001C3B70 /* CMWebViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,6 +204,7 @@
 				DD6E31FA17275BDC000E7042 /* CMDataDownloader.m in Sources */,
 				DD6E31FD17275D3E000E7042 /* CMRssRecord.m in Sources */,
 				DD6E320017277439000E7042 /* CMDataParser.m in Sources */,
+				DDA83BEB172AD623001C3B70 /* CMWebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

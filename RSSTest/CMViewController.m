@@ -1,5 +1,6 @@
 #import "CMViewController.h"
 #import "CMRssRecord.h"
+#import "CMWebViewController.h"
 
 @interface CMViewController ()
 
@@ -12,7 +13,7 @@
 
 @implementation CMViewController
 
-@synthesize dataDownloader = _dataDownloader, rssRecords = _rssRecords, dataParser = _dataParser;
+@synthesize dataDownloader = _dataDownloader, dataParser = _dataParser;
 
 static NSString* cCacheFilename = @"rsscache.plist";
 static NSString *cRefreshCellId = @"refreshCell";
@@ -27,10 +28,32 @@ static NSString *cRecordCellId = @"recordCell";
 
 - (void) refreshTable
 {
-    dispatch_sync(dispatch_get_main_queue(), ^(void)
-                  {
+    dispatch_async(dispatch_get_main_queue(), ^(void)
+                  {                   
                       [self.tableView reloadData];
                   });
+}
+
+- (int) getRssIndexForCell:(int) cellIndex
+{
+    return self.showRefresh ? cellIndex - 1 : cellIndex;
+}
+
+- (void) setRssRecords:(NSMutableArray *)rssRecords
+{
+    @synchronized(_rssRecords)
+    {
+        [_rssRecords release];
+        _rssRecords = [rssRecords retain];
+    }
+}
+
+- (NSMutableArray *) rssRecords
+{
+    @synchronized(_rssRecords)
+    {
+        return _rssRecords;
+    }
 }
 
 #pragma mark Data routines
@@ -56,9 +79,9 @@ static NSString *cRecordCellId = @"recordCell";
 {
     // should not be called from the main thread
     self.rssRecords = [self readFromStorage];
-    if (_rssRecords)
+    if (self.rssRecords)
     {
-        NSLog(@"Records read from cache: %d", [_rssRecords count]);
+        NSLog(@"Records read from cache: %d", [self.rssRecords count]);
         [self refreshTable];
     }
     else
@@ -73,12 +96,12 @@ static NSString *cRecordCellId = @"recordCell";
     if (!_dataDownloader)
     {
         NSLog(@"Downloading records");
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) , ^(void)
-                       {
-                           _dataDownloader = [[CMDataDownloader alloc] init];
-                           _dataDownloader.delegate = self;
-                           [_dataDownloader downloadData];
-                       });
+        dispatch_async(_backgroundQueue, ^(void)
+        {
+            _dataDownloader = [[CMDataDownloader alloc] init];
+            _dataDownloader.delegate = self;
+            [_dataDownloader downloadData];
+        });
     }
     else
     {
@@ -86,46 +109,48 @@ static NSString *cRecordCellId = @"recordCell";
     } 
 }
 
-- (void) sortAndFilter
+- (void) addRecords:(NSArray *) records
 {
-    static NSComparator dateSorting = ^(CMRssRecord *rec1, CMRssRecord *rec2)
+    @synchronized (_rssRecords)
     {
-        return [rec2.date compare:rec1.date];
-    };
-    [_rssRecords sortUsingComparator:dateSorting];
-    NSMutableIndexSet *duplicates = nil;
-    for (int i = 0; i < [_rssRecords count] - 1; i++)
-    {
-        CMRssRecord *current = [_rssRecords objectAtIndex:i];
-        CMRssRecord *next = [_rssRecords objectAtIndex:i + 1];
-        if ([current.date isEqualToDate:next.date] &&
-            [current.url isEqualToString:next.url])
+        for (CMRssRecord *record in records)
         {
-            if (!duplicates)
-                duplicates = [NSMutableIndexSet indexSet];
-            [duplicates addIndex:i];
+            BOOL shouldAdd = YES;
+            for (int i = 0; i < [_rssRecords count]; i++)
+            {
+                CMRssRecord *storedRecord = [_rssRecords objectAtIndex:i];
+                if ([record.date isEqualToDate:storedRecord.date] &&
+                    [record.url isEqualToString:storedRecord.url])
+                {
+                    shouldAdd = NO;
+                    break;
+                }
+                
+                if ([record.date compare:storedRecord.date] == NSOrderedDescending)
+                {
+                    shouldAdd = NO;
+                    [_rssRecords insertObject:record atIndex:i];
+                    break;
+                }
+            }
+            
+            if (shouldAdd)
+                [_rssRecords addObject:record];
         }
     }
-    if (duplicates)
-        [_rssRecords removeObjectsAtIndexes:duplicates];
 }
 
-- (void) recordParsed:(CMRssRecord *)rssRecord
+- (void) recordsParsed:(NSArray *) rssRecords
 {
-    [_rssRecords addObject:rssRecord];
-    [self sortAndFilter];
+    [self addRecords:rssRecords];
     [self refreshTable];
 }
 
 - (void) finishedParsing
 {
     self.dataParser = nil;
-    // TODO: should make tableView to show Refresh button now. Actually, it doesn't
     [self refreshTable];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) , ^(void)
-                   {
-                       [self writeToStorage:_rssRecords];
-                   });
+    [self writeToStorage:self.rssRecords];
 }
 
 - (void) parseData:(NSData *) data
@@ -139,14 +164,26 @@ static NSString *cRecordCellId = @"recordCell";
 - (void) dataDownloaded:(NSData *)data
 {
     NSLog(@"Download finished");
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) , ^(void)
-                   {
-                       [self parseData:data];
-                       self.dataDownloader = nil;
-                   });
+    self.dataDownloader = nil;
+    [self parseData:data];
 }
 
 #pragma mark UITableViewDataSource delegate methods
+
+- (UITableViewHeaderFooterView *) getRefreshHeaderCell
+{
+    UITableViewHeaderFooterView *cell = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:cRefreshCellId];
+    if (!cell)
+    {
+        cell = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:cRefreshCellId];
+        cell.contentView.backgroundColor = [UIColor greenColor];
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.textLabel.textAlignment = UITextAlignmentCenter;
+        cell.textLabel.text = @"Обновить";
+        [cell autorelease];
+    }
+    return cell;
+}
 
 - (UITableViewCell *) getRefreshCell
 {    
@@ -158,11 +195,12 @@ static NSString *cRecordCellId = @"recordCell";
         cell.textLabel.textColor = [UIColor grayColor];
         cell.textLabel.textAlignment = UITextAlignmentCenter;
         cell.textLabel.text = @"Обновить";
+        [cell autorelease];
     }
     return cell;
 }
 
-- (UITableViewCell *) getRSSCellForRecord:(CMRssRecord *) record
+- (UITableViewCell *) getRssCellForRecord:(CMRssRecord *) record
 {    
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cRecordCellId];
     if (!cell)
@@ -170,6 +208,7 @@ static NSString *cRecordCellId = @"recordCell";
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cRecordCellId];
         cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [cell autorelease];
     }
     cell.textLabel.text = record.title;
     cell.detailTextLabel.text = [_dateFormatter stringFromDate:record.date];
@@ -182,24 +221,35 @@ static NSString *cRecordCellId = @"recordCell";
         return [self getRefreshCell];
     else
     {
-        int index = self.showRefresh ? indexPath.row - 1: indexPath.row;
-        return [self getRSSCellForRecord:[_rssRecords objectAtIndex:index]];
+        int index = [self getRssIndexForCell:indexPath.row];
+        return [self getRssCellForRecord:[self.rssRecords objectAtIndex:index]];
     }
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.showRefresh ? [_rssRecords count] + 1 : [_rssRecords count];
+    return self.showRefresh ? [self.rssRecords count] + 1 : [self.rssRecords count];
 }
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSString *cellId = [[table cellForRowAtIndexPath:indexPath] reuseIdentifier];
     if ([cellId isEqualToString:cRefreshCellId])
+    {
         [self downloadData];
-        
+    }
+    else
+    {        
+        int index = [self getRssIndexForCell:indexPath.row];
+        CMWebViewController *vc = [[CMWebViewController alloc] init];
+        CMRssRecord *rec = [self.rssRecords objectAtIndex:index];
+        vc.url = rec.url;
+        [self.navigationController pushViewController:vc animated:YES];
+        [vc release];
+    }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 #pragma mark Object lifecycle
@@ -214,18 +264,25 @@ static NSString *cRecordCellId = @"recordCell";
         _dateFormatter.dateStyle = NSDateFormatterLongStyle;
         _dateFormatter.timeStyle = NSDateFormatterShortStyle;
         _dateFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"RU"] autorelease];
+        _backgroundQueue = dispatch_queue_create("rsstest.background.queue", NULL);
     }
     
     return self;
 }
 
+- (void) viewWillAppear:(BOOL) animated
+{
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) , ^(void)
-                   {
-                       [self readRecords];
-                   });
+    dispatch_async(_backgroundQueue, ^(void)
+    {
+        [self readRecords];
+    });
 }
 
 - (void)didReceiveMemoryWarning
@@ -241,6 +298,7 @@ static NSString *cRecordCellId = @"recordCell";
     self.rssRecords = nil;
     [_cacheFilePath release];
     [_dateFormatter release];
+    dispatch_release(_backgroundQueue);
     [super dealloc];
 }
 

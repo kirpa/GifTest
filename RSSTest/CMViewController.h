@@ -9,8 +9,9 @@
     NSMutableArray      *_rssRecords;
     NSString            *_cacheFilePath;
     NSDateFormatter     *_dateFormatter;
+    dispatch_queue_t    _backgroundQueue;
 }
 
-@property (retain, nonatomic) IBOutlet UITableView* tableView;
+@property (assign, nonatomic) IBOutlet UITableView* tableView;
 
 @end
