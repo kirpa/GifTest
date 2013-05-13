@@ -1,8 +1,11 @@
 #import <Foundation/Foundation.h>
 
+@class CMGifDataRecord;
+
 @protocol DataDownloaderDelegate <NSObject>
 
-- (void) dataDownloaded:(NSData *) data;
+- (void) dataDownloaded:(CMGifDataRecord *) gifRecord;
+- (void) progressChanged:(float) progress;
 
 @end
 
@@ -14,6 +17,7 @@
 
 @property (assign, nonatomic) id<DataDownloaderDelegate> delegate;
 
-- (void) downloadData;
+- (void) downloadDataForGif:(CMGifDataRecord *) gifRecord;
+- (void) stopDownload;
 
 @end

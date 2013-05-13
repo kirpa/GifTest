@@ -1,106 +1,53 @@
 #import "CMViewController.h"
-#import "CMRssRecord.h"
-#import "CMWebViewController.h"
+#import "CMGifDataRecord.h"
+#import "CMGifViewController.h"
 
 @interface CMViewController ()
 
 @property (retain, atomic) CMDataDownloader *dataDownloader;
-@property (retain, atomic) CMDataParser     *dataParser;
-@property (retain, atomic) NSMutableArray   *rssRecords;
-@property (readonly, nonatomic) BOOL        showRefresh;
+@property (retain, nonatomic) CMGifViewController *gifVC;
 
 @end
 
 @implementation CMViewController
 
-@synthesize dataDownloader = _dataDownloader, dataParser = _dataParser;
+@synthesize dataDownloader = _dataDownloader;
 
-static NSString* cCacheFilename = @"rsscache.plist";
-static NSString *cRefreshCellId = @"refreshCell";
-static NSString *cRecordCellId = @"recordCell";
+#pragma mark Downloader delegate methods
 
-#pragma mark -
-
-- (BOOL) showRefresh
-{
-    return !(self.dataDownloader || self.dataParser);
-}
-
-- (void) refreshTable
+- (void) dataDownloaded:(CMGifDataRecord *) gifRecord
 {
     dispatch_async(dispatch_get_main_queue(), ^(void)
-                  {                   
-                      [self.tableView reloadData];
-                  });
+                   {
+                       [self.gifVC showGIFfromData:gifRecord.data];
+                   });
 }
 
-- (int) getRssIndexForCell:(int) cellIndex
+- (void) progressChanged:(float) progress
 {
-    return self.showRefresh ? cellIndex - 1 : cellIndex;
-}
-
-- (void) setRssRecords:(NSMutableArray *)rssRecords
-{
-    @synchronized(_rssRecords)
+    if (self.gifVC)
     {
-        [_rssRecords release];
-        _rssRecords = [rssRecords retain];
+        NSLog(@"Setting progress to: %.1f", progress);
+        dispatch_async(dispatch_get_main_queue(), ^(void)
+                       {
+                           [self.gifVC.progressView setProgress:progress animated:YES];
+                       });
     }
-}
-
-- (NSMutableArray *) rssRecords
-{
-    @synchronized(_rssRecords)
-    {
-        return _rssRecords;
-    }
+    else
+        NSLog(@"Downloading while not showing GIF view controller, this should not happen");
 }
 
 #pragma mark Data routines
 
-- (void) writeToStorage:(NSArray *) array
-{
-    BOOL success = [NSKeyedArchiver archiveRootObject:array toFile:_cacheFilePath];
-    if (!success)
-        NSLog(@"Error writing RSS to storage");
-}
-
-- (NSMutableArray *) readFromStorage
-{
-    NSMutableArray *array = [[NSKeyedUnarchiver unarchiveObjectWithFile:_cacheFilePath] mutableCopy];
-    if (!array)
-    {
-            NSLog(@"Error reading RSS from storage");
-    }
-    return [array autorelease];
-}
-
-- (void) readRecords
-{
-    // should not be called from the main thread
-    self.rssRecords = [self readFromStorage];
-    if (self.rssRecords)
-    {
-        NSLog(@"Records read from cache: %d", [self.rssRecords count]);
-        [self refreshTable];
-    }
-    else
-    {
-        self.rssRecords = [NSMutableArray array];
-    }
-    [self downloadData];
-}
-
-- (void) downloadData
+- (void) downloadDataForGif:(CMGifDataRecord *) gifRecord
 {
     if (!_dataDownloader)
     {
-        NSLog(@"Downloading records");
         dispatch_async(_backgroundQueue, ^(void)
         {
             _dataDownloader = [[CMDataDownloader alloc] init];
             _dataDownloader.delegate = self;
-            [_dataDownloader downloadData];
+            [_dataDownloader downloadDataForGif:gifRecord];
         });
     }
     else
@@ -109,146 +56,57 @@ static NSString *cRecordCellId = @"recordCell";
     } 
 }
 
-- (void) addRecords:(NSArray *) records
-{
-    @synchronized (_rssRecords)
-    {
-        for (CMRssRecord *record in records)
-        {
-            BOOL shouldAdd = YES;
-            for (int i = 0; i < [_rssRecords count]; i++)
-            {
-                CMRssRecord *storedRecord = [_rssRecords objectAtIndex:i];
-                if ([record.date isEqualToDate:storedRecord.date] &&
-                    [record.url isEqualToString:storedRecord.url])
-                {
-                    shouldAdd = NO;
-                    break;
-                }
-                
-                if ([record.date compare:storedRecord.date] == NSOrderedDescending)
-                {
-                    shouldAdd = NO;
-                    [_rssRecords insertObject:record atIndex:i];
-                    break;
-                }
-            }
-            
-            if (shouldAdd)
-                [_rssRecords addObject:record];
-        }
-    }
-}
-
-- (void) recordsParsed:(NSArray *) rssRecords
-{
-    [self addRecords:rssRecords];
-    [self refreshTable];
-}
-
-- (void) finishedParsing
-{
-    self.dataParser = nil;
-    [self refreshTable];
-    [self writeToStorage:self.rssRecords];
-}
-
-- (void) parseData:(NSData *) data
-{
-    // should not be called from the main thread
-    _dataParser = [[CMDataParser alloc] init];
-    _dataParser.delegate = self;
-    [_dataParser parseData:data];
-}
-
-- (void) dataDownloaded:(NSData *)data
-{
-    NSLog(@"Download finished");
-    self.dataDownloader = nil;
-    [self parseData:data];
-}
-
 #pragma mark UITableViewDataSource delegate methods
 
-- (UITableViewHeaderFooterView *) getRefreshHeaderCell
+- (UITableViewCell *) tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewHeaderFooterView *cell = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:cRefreshCellId];
-    if (!cell)
-    {
-        cell = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:cRefreshCellId];
-        cell.contentView.backgroundColor = [UIColor greenColor];
-        cell.textLabel.textColor = [UIColor grayColor];
-        cell.textLabel.textAlignment = UITextAlignmentCenter;
-        cell.textLabel.text = @"Обновить";
-        [cell autorelease];
-    }
-    return cell;
-}
-
-- (UITableViewCell *) getRefreshCell
-{    
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cRefreshCellId];
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cRefreshCellId];
-        cell.contentView.backgroundColor = [UIColor greenColor];
-        cell.textLabel.textColor = [UIColor grayColor];
-        cell.textLabel.textAlignment = UITextAlignmentCenter;
-        cell.textLabel.text = @"Обновить";
-        [cell autorelease];
-    }
-    return cell;
-}
-
-- (UITableViewCell *) getRssCellForRecord:(CMRssRecord *) record
-{    
+    static NSString *cRecordCellId = @"recordCell";
+    
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cRecordCellId];
     if (!cell)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cRecordCellId];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cRecordCellId];
         cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [cell autorelease];
     }
-    cell.textLabel.text = record.title;
-    cell.detailTextLabel.text = [_dateFormatter stringFromDate:record.date];
+    cell.textLabel.text = [NSString stringWithFormat:@"Gif %d", indexPath.row + 1];
     return cell;
-}
-
-- (UITableViewCell *) tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0 && self.showRefresh)
-        return [self getRefreshCell];
-    else
-    {
-        int index = [self getRssIndexForCell:indexPath.row];
-        return [self getRssCellForRecord:[self.rssRecords objectAtIndex:index]];
-    }
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.showRefresh ? [self.rssRecords count] + 1 : [self.rssRecords count];
+    return [_gifURLs count];
 }
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cellId = [[table cellForRowAtIndexPath:indexPath] reuseIdentifier];
-    if ([cellId isEqualToString:cRefreshCellId])
+    self.gifVC = [[[CMGifViewController alloc] init] autorelease];
+    int index = indexPath.row;
+    CMGifDataRecord *gifRec = [_downloadedGif objectAtIndex:index];
+    if ([gifRec isEqual:[NSNull null]])
     {
-        [self downloadData];
+        NSLog(@"No data downloaded, creating gif record");
+        gifRec = [[CMGifDataRecord alloc] init];
+        gifRec.urlString = [_gifURLs objectAtIndex:index];
+        [_downloadedGif replaceObjectAtIndex:index withObject:gifRec];
+        [gifRec release];
+    }
+    if (!gifRec.complete)
+    {
+        NSLog(@"Download is not complete, resuming");
+        self.gifVC.progressView.hidden = NO;
+        [self downloadDataForGif:gifRec];
     }
     else
-    {        
-        int index = [self getRssIndexForCell:indexPath.row];
-        CMWebViewController *vc = [[CMWebViewController alloc] init];
-        CMRssRecord *rec = [self.rssRecords objectAtIndex:index];
-        vc.url = rec.url;
-        [self.navigationController pushViewController:vc animated:YES];
-        [vc release];
+    {
+        NSLog(@"Data downloaded, just opening");
+        [self.gifVC showGIFfromData:gifRec.data];
     }
+    [self.navigationController pushViewController:self.gifVC animated:YES];
+
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
@@ -258,12 +116,24 @@ static NSString *cRecordCellId = @"recordCell";
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
     {
-        NSArray *libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-        _cacheFilePath = [[NSString stringWithFormat:@"%@/%@", [libraryPath objectAtIndex:0], cCacheFilename] retain];
-        _dateFormatter = [[NSDateFormatter alloc] init];
-        _dateFormatter.dateStyle = NSDateFormatterLongStyle;
-        _dateFormatter.timeStyle = NSDateFormatterShortStyle;
-        _dateFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"RU"] autorelease];
+        _gifURLs = [[NSArray arrayWithObjects:
+                     @"http://s01.developerslife.ru/public/images/gifs/d898ff0d-e06d-482c-95dd-552de9307aa6.gif",
+                     @"http://s0.developerslife.ru/public/images/gifs/407ab7c4-64d8-4e72-b9cb-e0c06d8d3130.gif",
+                     @"http://s0.developerslife.ru/public/images/gifs/baaaf66f-8857-488b-9d28-95ab450900ec.gif",
+                     @"http://s01.developerslife.ru/public/images/gifs/89721c82-00d7-4737-b569-d5aeb3f81cd2.gif",
+                     @"http://s1.developerslife.ru/public/images/gifs/6f3b2508-2deb-41a2-912c-95dc9f0ecfc0.gif",
+                     @"http://s1.developerslife.ru/public/images/gifs/8ebcb08a-bffe-49db-9b47-0b85cec7d2b1.gif",
+                     @"http://s0.developerslife.ru/public/images/gifs/86ae10d7-5b64-485a-824d-d3bb127b0793.gif",
+                     @"http://s3.developerslife.ru/public/images/gifs/fa02544c-ddf5-4a17-971d-5a3b6221cf67.gif",
+                     @"http://s3.developerslife.ru/public/images/gifs/0945408f-6258-4545-95a2-486cc5096181.gif",
+                     @"http://s01.developerslife.ru/public/images/gifs/10e11bec-4db0-4396-b17e-117fb2e1ddc0.gif",
+                     @"http://s0.developerslife.ru/public/images/gifs/2260791b-7d7d-4995-898e-f43182adc720.gif",
+                     @"http://s1.developerslife.ru/public/images/gifs/4774545a-f5b9-442f-89dd-5c7ec11bdcc7.gif",
+                     @"http://s0.developerslife.ru/public/images/gifs/c11b27ed-a800-48b0-b8db-a8f1206133f5.gif", nil] retain];
+        
+        _downloadedGif = [[NSMutableArray alloc] initWithCapacity:_gifURLs.count];
+        for (int i = 0; i < _gifURLs.count; i++)
+            [_downloadedGif addObject:[NSNull null]];
         _backgroundQueue = dispatch_queue_create("rsstest.background.queue", NULL);
     }
     
@@ -274,30 +144,33 @@ static NSString *cRecordCellId = @"recordCell";
 {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [super viewWillAppear:animated];
+    if (_dataDownloader)
+    {
+                           [_dataDownloader stopDownload];
+                           [_dataDownloader release];
+                           _dataDownloader = nil;
+
+    }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    dispatch_async(_backgroundQueue, ^(void)
-    {
-        [self readRecords];
-    });
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    for (int i = 0; i < _gifURLs.count; i++)
+        [_downloadedGif replaceObjectAtIndex:i withObject:[NSNull null]];
 }
 
 - (void) dealloc
 {
     self.dataDownloader = nil;
-    self.dataParser = nil;
-    self.rssRecords = nil;
-    [_cacheFilePath release];
-    [_dateFormatter release];
+    self.gifVC = nil;
+    [_downloadedGif release];
+    [_gifURLs release];
     dispatch_release(_backgroundQueue);
     [super dealloc];
 }

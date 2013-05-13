@@ -1,14 +1,11 @@
 #import <UIKit/UIKit.h>
 #import "CMDataDownloader.h"
-#import "CMDataParser.h"
 
-@interface CMViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataDownloaderDelegate, DataParserDelegate>
+@interface CMViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataDownloaderDelegate>
 {
     CMDataDownloader    *_dataDownloader;
-    CMDataParser        *_dataParser;
-    NSMutableArray      *_rssRecords;
-    NSString            *_cacheFilePath;
-    NSDateFormatter     *_dateFormatter;
+    NSArray             *_gifURLs;
+    NSMutableArray      *_downloadedGif;
     dispatch_queue_t    _backgroundQueue;
 }
 

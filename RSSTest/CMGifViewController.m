@@ -1,10 +1,25 @@
-#import "CMWebViewController.h"
+#import "CMGifViewController.h"
 
-@interface CMWebViewController ()
+@interface CMGifViewController ()
 
 @end
 
-@implementation CMWebViewController
+@implementation CMGifViewController
+
+static NSString *cGifType = @"image/gif";
+
+#pragma mark Other methods
+
+- (void) showGIFfromData:(NSData *) gifData
+{
+    if (!self.view)
+        // nothing. Just touching the view to create it
+        ;
+    self.progressView.hidden = YES;
+    [self.webView loadData:gifData MIMEType:cGifType textEncodingName:nil baseURL:nil];
+}
+
+#pragma mark UIViewController methods
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -21,25 +36,10 @@
     [super viewWillAppear:animated];
 }
 
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    NSString *escapedUrlStr = [self.url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:escapedUrlStr]];
-    [self.webView loadRequest:request];
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void) dealloc
-{
-    self.url = nil;
-    [super dealloc];
 }
 
 @end

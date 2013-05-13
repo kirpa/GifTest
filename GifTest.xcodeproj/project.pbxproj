@@ -19,21 +19,20 @@
 		DD6E31EC17275521000E7042 /* CMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31EB17275521000E7042 /* CMViewController.m */; };
 		DD6E31EF17275521000E7042 /* CMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD6E31ED17275521000E7042 /* CMViewController.xib */; };
 		DD6E31FA17275BDC000E7042 /* CMDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31F917275BDC000E7042 /* CMDataDownloader.m */; };
-		DD6E31FD17275D3E000E7042 /* CMRssRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31FC17275D3E000E7042 /* CMRssRecord.m */; };
-		DD6E320017277439000E7042 /* CMDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31FF17277439000E7042 /* CMDataParser.m */; };
-		DDA83BEB172AD623001C3B70 /* CMWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA83BE9172AD623001C3B70 /* CMWebViewController.m */; };
-		DDA83BEC172AD623001C3B70 /* CMWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDA83BEA172AD623001C3B70 /* CMWebViewController.xib */; };
+		DD6E31FD17275D3E000E7042 /* CMGifDataRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6E31FC17275D3E000E7042 /* CMGifDataRecord.m */; };
+		DD91B2B3173F3384003A50F4 /* CMGifViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD91B2B1173F3384003A50F4 /* CMGifViewController.m */; };
+		DD91B2B4173F3384003A50F4 /* CMGifViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD91B2B2173F3384003A50F4 /* CMGifViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DD6E31CF17275521000E7042 /* RSSTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RSSTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD6E31CF17275521000E7042 /* GifTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GifTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD6E31D217275521000E7042 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DD6E31D417275521000E7042 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DD6E31D617275521000E7042 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		DD6E31DA17275521000E7042 /* RSSTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RSSTest-Info.plist"; sourceTree = "<group>"; };
+		DD6E31DA17275521000E7042 /* GifTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GifTest-Info.plist"; sourceTree = "<group>"; };
 		DD6E31DC17275521000E7042 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DD6E31DE17275521000E7042 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DD6E31E017275521000E7042 /* RSSTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RSSTest-Prefix.pch"; sourceTree = "<group>"; };
+		DD6E31E017275521000E7042 /* GifTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GifTest-Prefix.pch"; sourceTree = "<group>"; };
 		DD6E31E117275521000E7042 /* CMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMAppDelegate.h; sourceTree = "<group>"; };
 		DD6E31E217275521000E7042 /* CMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CMAppDelegate.m; sourceTree = "<group>"; };
 		DD6E31E417275521000E7042 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -44,13 +43,11 @@
 		DD6E31EE17275521000E7042 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CMViewController.xib; sourceTree = "<group>"; };
 		DD6E31F817275BDC000E7042 /* CMDataDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMDataDownloader.h; sourceTree = "<group>"; };
 		DD6E31F917275BDC000E7042 /* CMDataDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMDataDownloader.m; sourceTree = "<group>"; };
-		DD6E31FB17275D3E000E7042 /* CMRssRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMRssRecord.h; sourceTree = "<group>"; };
-		DD6E31FC17275D3E000E7042 /* CMRssRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMRssRecord.m; sourceTree = "<group>"; };
-		DD6E31FE17277439000E7042 /* CMDataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMDataParser.h; sourceTree = "<group>"; };
-		DD6E31FF17277439000E7042 /* CMDataParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMDataParser.m; sourceTree = "<group>"; };
-		DDA83BE8172AD623001C3B70 /* CMWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMWebViewController.h; sourceTree = "<group>"; };
-		DDA83BE9172AD623001C3B70 /* CMWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMWebViewController.m; sourceTree = "<group>"; };
-		DDA83BEA172AD623001C3B70 /* CMWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMWebViewController.xib; sourceTree = "<group>"; };
+		DD6E31FB17275D3E000E7042 /* CMGifDataRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMGifDataRecord.h; sourceTree = "<group>"; };
+		DD6E31FC17275D3E000E7042 /* CMGifDataRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMGifDataRecord.m; sourceTree = "<group>"; };
+		DD91B2B0173F3384003A50F4 /* CMGifViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMGifViewController.h; sourceTree = "<group>"; };
+		DD91B2B1173F3384003A50F4 /* CMGifViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMGifViewController.m; sourceTree = "<group>"; };
+		DD91B2B2173F3384003A50F4 /* CMGifViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMGifViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +67,7 @@
 		DD6E31C617275521000E7042 = {
 			isa = PBXGroup;
 			children = (
-				DD6E31D817275521000E7042 /* RSSTest */,
+				DD6E31D817275521000E7042 /* GifTest */,
 				DD6E31D117275521000E7042 /* Frameworks */,
 				DD6E31D017275521000E7042 /* Products */,
 			);
@@ -79,7 +76,7 @@
 		DD6E31D017275521000E7042 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DD6E31CF17275521000E7042 /* RSSTest.app */,
+				DD6E31CF17275521000E7042 /* GifTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -94,35 +91,34 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DD6E31D817275521000E7042 /* RSSTest */ = {
+		DD6E31D817275521000E7042 /* GifTest */ = {
 			isa = PBXGroup;
 			children = (
 				DD6E31E117275521000E7042 /* CMAppDelegate.h */,
 				DD6E31E217275521000E7042 /* CMAppDelegate.m */,
 				DD6E31EA17275521000E7042 /* CMViewController.h */,
 				DD6E31EB17275521000E7042 /* CMViewController.m */,
-				DDA83BE8172AD623001C3B70 /* CMWebViewController.h */,
-				DDA83BE9172AD623001C3B70 /* CMWebViewController.m */,
+				DD91B2B0173F3384003A50F4 /* CMGifViewController.h */,
+				DD91B2B1173F3384003A50F4 /* CMGifViewController.m */,
 				DD6E31F817275BDC000E7042 /* CMDataDownloader.h */,
 				DD6E31F917275BDC000E7042 /* CMDataDownloader.m */,
-				DD6E31FE17277439000E7042 /* CMDataParser.h */,
-				DD6E31FF17277439000E7042 /* CMDataParser.m */,
-				DD6E31FB17275D3E000E7042 /* CMRssRecord.h */,
-				DD6E31FC17275D3E000E7042 /* CMRssRecord.m */,
-				DD6E31ED17275521000E7042 /* CMViewController.xib */,
-				DDA83BEA172AD623001C3B70 /* CMWebViewController.xib */,
+				DD6E31FB17275D3E000E7042 /* CMGifDataRecord.h */,
+				DD6E31FC17275D3E000E7042 /* CMGifDataRecord.m */,
 				DD6E31D917275521000E7042 /* Supporting Files */,
 			);
+			name = GifTest;
 			path = RSSTest;
 			sourceTree = "<group>";
 		};
 		DD6E31D917275521000E7042 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				DD6E31DA17275521000E7042 /* RSSTest-Info.plist */,
+				DD6E31ED17275521000E7042 /* CMViewController.xib */,
+				DD91B2B2173F3384003A50F4 /* CMGifViewController.xib */,
+				DD6E31DA17275521000E7042 /* GifTest-Info.plist */,
 				DD6E31DB17275521000E7042 /* InfoPlist.strings */,
 				DD6E31DE17275521000E7042 /* main.m */,
-				DD6E31E017275521000E7042 /* RSSTest-Prefix.pch */,
+				DD6E31E017275521000E7042 /* GifTest-Prefix.pch */,
 				DD6E31E417275521000E7042 /* Default.png */,
 				DD6E31E617275521000E7042 /* Default@2x.png */,
 				DD6E31E817275521000E7042 /* Default-568h@2x.png */,
@@ -133,9 +129,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DD6E31CE17275521000E7042 /* RSSTest */ = {
+		DD6E31CE17275521000E7042 /* GifTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DD6E31F217275521000E7042 /* Build configuration list for PBXNativeTarget "RSSTest" */;
+			buildConfigurationList = DD6E31F217275521000E7042 /* Build configuration list for PBXNativeTarget "GifTest" */;
 			buildPhases = (
 				DD6E31CB17275521000E7042 /* Sources */,
 				DD6E31CC17275521000E7042 /* Frameworks */,
@@ -145,9 +141,9 @@
 			);
 			dependencies = (
 			);
-			name = RSSTest;
+			name = GifTest;
 			productName = RSSTest;
-			productReference = DD6E31CF17275521000E7042 /* RSSTest.app */;
+			productReference = DD6E31CF17275521000E7042 /* GifTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -160,7 +156,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = Vadim;
 			};
-			buildConfigurationList = DD6E31CA17275521000E7042 /* Build configuration list for PBXProject "RSSTest" */;
+			buildConfigurationList = DD6E31CA17275521000E7042 /* Build configuration list for PBXProject "GifTest" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -172,7 +168,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DD6E31CE17275521000E7042 /* RSSTest */,
+				DD6E31CE17275521000E7042 /* GifTest */,
 			);
 		};
 /* End PBXProject section */
@@ -187,7 +183,7 @@
 				DD6E31E717275521000E7042 /* Default@2x.png in Resources */,
 				DD6E31E917275521000E7042 /* Default-568h@2x.png in Resources */,
 				DD6E31EF17275521000E7042 /* CMViewController.xib in Resources */,
-				DDA83BEC172AD623001C3B70 /* CMWebViewController.xib in Resources */,
+				DD91B2B4173F3384003A50F4 /* CMGifViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,9 +198,8 @@
 				DD6E31E317275521000E7042 /* CMAppDelegate.m in Sources */,
 				DD6E31EC17275521000E7042 /* CMViewController.m in Sources */,
 				DD6E31FA17275BDC000E7042 /* CMDataDownloader.m in Sources */,
-				DD6E31FD17275D3E000E7042 /* CMRssRecord.m in Sources */,
-				DD6E320017277439000E7042 /* CMDataParser.m in Sources */,
-				DDA83BEB172AD623001C3B70 /* CMWebViewController.m in Sources */,
+				DD6E31FD17275D3E000E7042 /* CMGifDataRecord.m in Sources */,
+				DD91B2B3173F3384003A50F4 /* CMGifViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,10 +283,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RSSTest/RSSTest-Prefix.pch";
-				INFOPLIST_FILE = "RSSTest/RSSTest-Info.plist";
+				GCC_PREFIX_HEADER = "RSSTest/GifTest-Prefix.pch";
+				INFOPLIST_FILE = "RSSTest/GifTest-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GifTest;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -300,10 +295,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RSSTest/RSSTest-Prefix.pch";
-				INFOPLIST_FILE = "RSSTest/RSSTest-Info.plist";
+				GCC_PREFIX_HEADER = "RSSTest/GifTest-Prefix.pch";
+				INFOPLIST_FILE = "RSSTest/GifTest-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GifTest;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -311,7 +306,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DD6E31CA17275521000E7042 /* Build configuration list for PBXProject "RSSTest" */ = {
+		DD6E31CA17275521000E7042 /* Build configuration list for PBXProject "GifTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD6E31F017275521000E7042 /* Debug */,
@@ -320,7 +315,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DD6E31F217275521000E7042 /* Build configuration list for PBXNativeTarget "RSSTest" */ = {
+		DD6E31F217275521000E7042 /* Build configuration list for PBXNativeTarget "GifTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD6E31F317275521000E7042 /* Debug */,
